@@ -1478,7 +1478,12 @@ class yTubeMusicComponent(MediaPlayerEntity):
 			if(media_type == MEDIA_TYPE_PLAYLIST):
 				crash_extra = 'get_playlist(playlistId=' + str(media_id) + ')'
 				playlist_info = await self.hass.async_add_executor_job(lambda: self._api.get_playlist(media_id, limit=self._trackLimit))
+				#try: # try statement to stop python going mad
+				#	self._tracks = playlist_info['tracks'][:self._trackLimit]  # limit function doesn't really work ... seems like
+				#except KeyError:  # if not songs
+				self.log_me('debug', f"playlist_info var: f{str(playlist_info)}")
 				self._tracks = playlist_info['tracks'][:self._trackLimit]  # limit function doesn't really work ... seems like
+				
 				self._attributes['current_playlist_title'] = str(playlist_info['title'])
 			elif(media_type == MEDIA_TYPE_ALBUM):
 				crash_extra = 'get_album(browseId=' + str(media_id) + ')'
